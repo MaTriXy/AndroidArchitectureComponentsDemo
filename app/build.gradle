@@ -40,4 +40,8 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.0.0-alpha3'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
     androidTestImplementation 'androidx.test:rules:1.1.0-alpha3'
+
+    //Room
+    implementation "android.arch.persistence.room:runtime:1.1.1-rc1"
+    implementation "android.arch.persistence.room:compiler:1.1.1-rc1"
 }
