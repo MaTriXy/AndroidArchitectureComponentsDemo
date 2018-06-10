@@ -2,8 +2,8 @@
 
 buildscript {
     repositories {
-        google()
         jcenter()
+        google()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.2.0-alpha17'
@@ -14,12 +14,17 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.gradle.build-scan' version '1.13.3'
+}
+
 allprojects {
     repositories {
         google()
         jcenter()
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

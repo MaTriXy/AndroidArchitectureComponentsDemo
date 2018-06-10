@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -24,14 +25,23 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+buildScan {
+    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
+    termsOfServiceAgree = 'yes'
 }
 
 dependencies {
+    kapt 'androidx.databinding:databinding-compiler:3.2.0-alpha17'
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.2.41'
     implementation 'androidx.appcompat:appcompat:1.0.0-alpha3'
     implementation 'androidx.recyclerview:recyclerview:1.0.0-alpha3'
     implementation 'androidx.preference:preference:1.0.0-alpha3'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.1'
     implementation 'com.firebase:firebase-jobdispatcher:0.7.0'
 
     testImplementation 'junit:junit:4.12'
@@ -42,6 +52,11 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:1.1.0-alpha3'
 
     //Room
-    implementation "android.arch.persistence.room:runtime:1.1.1-rc1"
-    implementation "android.arch.persistence.room:compiler:1.1.1-rc1"
+    implementation "androidx.room:room-runtime:2.0.0-alpha1"
+    kapt "androidx.room:room-compiler:2.0.0-alpha1"
+
+    //Life Cycle
+    implementation "androidx.lifecycle:lifecycle-runtime:2.0.0-alpha1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.0.0-alpha1"
+    kapt "androidx.lifecycle:lifecycle-compiler:2.0.0-alpha1"
 }

@@ -15,10 +15,9 @@
  */
 package com.kartikpatodi.sunshine.ui.detail;
 
-import androidx.databinding.DataBindingUtil;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.kartikpatodi.sunshine.AppExecutors;
 import com.kartikpatodi.sunshine.R;
 import com.kartikpatodi.sunshine.data.database.WeatherEntry;
 import com.kartikpatodi.sunshine.databinding.ActivityDetailBinding;
@@ -26,6 +25,10 @@ import com.kartikpatodi.sunshine.utilities.SunshineDateUtils;
 import com.kartikpatodi.sunshine.utilities.SunshineWeatherUtils;
 
 import java.util.Date;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
 
 /**
  * Displays single day's forecast
@@ -42,6 +45,7 @@ public class DetailActivity extends AppCompatActivity {
      * programmatically without cluttering up the code with findViewById.
      */
     private ActivityDetailBinding mDetailBinding;
+    private DetailActivityViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,30 @@ public class DetailActivity extends AppCompatActivity {
         mDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         long timestamp = getIntent().getLongExtra(WEATHER_ID_EXTRA, -1);
         Date date = new Date(timestamp);
+        mViewModel = ViewModelProviders.of(this).get(DetailActivityViewModel.class);
+
+        mViewModel.getWeather().observe(this, weatherEntry -> {
+            if (weatherEntry != null) bindWeatherToUI(weatherEntry);
+        });
+
+
+        AppExecutors.getInstance().diskIO().execute(()-> {
+            try {
+
+                // Pretend this is the network loading data
+                Thread.sleep(4000);
+                Date today = SunshineDateUtils.getNormalizedUtcDateForToday();
+                WeatherEntry pretendWeatherFromDatabase = new WeatherEntry(1, 210, today,88.0,99.0,71,1030, 74, 5);
+                mViewModel.setWeather(pretendWeatherFromDatabase);
+
+                Thread.sleep(2000);
+                pretendWeatherFromDatabase = new WeatherEntry(1, 952, today,50.0,60.0,46,1044, 70, 100);
+                mViewModel.setWeather(pretendWeatherFromDatabase);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
